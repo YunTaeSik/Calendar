@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/monthly_btn"
+        android:title="월별보기"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/weekly_btn"
+        android:title="주별보기"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/day_btn"
+        android:title="일별보기"
+        app:showAsAction="ifRoom" />
+</menu>
