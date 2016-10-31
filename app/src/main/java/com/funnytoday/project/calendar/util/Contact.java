@@ -5,4 +5,7 @@ package com.funnytoday.project.calendar.util;
  */
 public class Contact {
     public static String Real_Finish = "Real_Finish";
+    public static int VIEWPAGER_MAX = 1000;
+    public static int VIEWPAGER_CURRENT = 500;
+
 }
