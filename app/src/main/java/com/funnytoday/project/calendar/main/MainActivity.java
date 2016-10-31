@@ -1,10 +1,12 @@
-package com.funnytoday.project.calendar;
+package com.funnytoday.project.calendar.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.funnytoday.project.calendar.R;
 
 public class MainActivity extends AppCompatActivity {
 

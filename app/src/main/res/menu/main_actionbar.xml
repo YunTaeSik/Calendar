@@ -4,14 +4,17 @@
 
     <item
         android:id="@+id/monthly_btn"
-        android:title="월별보기"
+        android:title="M"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/weekly_btn"
-        android:title="주별보기"
+        android:title="W"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/day_btn"
-        android:title="일별보기"
+        android:title="D"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/write_btn"
+        android:title="@string/write_actionbar_text" />
 </menu>
