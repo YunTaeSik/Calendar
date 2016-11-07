@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Calendar</string>
-    <string name="write_actionbar_text">"일정 추가"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
