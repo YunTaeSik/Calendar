@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.bar_title_M));
+
         initFragment();
     }
 
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
         switch (item.getItemId()) {
             case R.id.monthly_btn:
                 fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
