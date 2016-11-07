@@ -1,19 +1,31 @@
 package com.funnytoday.project.calendar.main;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.fragment.DayFragment;
+import com.funnytoday.project.calendar.fragment.MouthFragment;
+import com.funnytoday.project.calendar.fragment.WeekFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.bar_title_M));
+        initFragment();
     }
 
     @Override
@@ -25,6 +37,39 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.monthly_btn:
+                fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
+                fragmentTransaction.commit();
+
+                actionBar.setTitle(getString(R.string.bar_title_M));
+                break;
+            case R.id.weekly_btn:
+                fragmentTransaction.replace(R.id.main_fragment, new WeekFragment());
+                fragmentTransaction.commit();
+
+                actionBar.setTitle(getString(R.string.bar_title_W));
+                break;
+            case R.id.day_btn:
+                fragmentTransaction.replace(R.id.main_fragment, new DayFragment());
+                fragmentTransaction.commit();
+
+                actionBar.setTitle(getString(R.string.bar_title_D));
+                break;
+            case R.id.write_btn:
+                /*fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
+                fragmentTransaction.commit();*/
+
+                actionBar.setTitle(getString(R.string.write_actionbar_text));
+                break;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initFragment() {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.main_fragment, new MouthFragment());
+        fragmentTransaction.commit();
     }
 }
