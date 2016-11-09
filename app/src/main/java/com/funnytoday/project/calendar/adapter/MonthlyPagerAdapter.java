@@ -25,10 +25,8 @@ public class MonthlyPagerAdapter extends PagerAdapter {
     private MouthlyBaseAdapter mouthlyBaseAdapter;
     private Calendar calendar;
 
-
-    public MonthlyPagerAdapter(Context context, Calendar calendar) {
+    public MonthlyPagerAdapter(Context context) {
         this.context = context;
-        this.calendar = calendar;
     }
 
     @Override
@@ -44,16 +42,20 @@ public class MonthlyPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         viewpager = LayoutInflater.from(context).inflate(R.layout.monthly_viewpager, null);
-
         viewHolder = new ViewHolder();
-        mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
+
         viewHolder.monthly_grid = (GridView) viewpager.findViewById(R.id.monthly_grid);
         viewHolder.calendar_text = (TextView) viewpager.findViewById(R.id.calendar_text);
-        viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
-        String calendar_text = String.valueOf(calendar.get(Calendar.YEAR)) + "년"
-                + String.valueOf(calendar.get(Calendar.MONTH)) + "월";
 
-        viewHolder.calendar_text.setText(calendar_text);
+        calendar = getCalendar(position);
+        String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
+                + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";
+        viewHolder.calendar_text.setText(cal_text);
+
+
+        mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
+        viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
+
         container.addView(viewpager);
         return viewpager;
     }
@@ -69,12 +71,15 @@ public class MonthlyPagerAdapter extends PagerAdapter {
     }
 
     private class ViewHolder {
-         GridView monthly_grid;
+        private GridView monthly_grid;
         private TextView calendar_text;
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+    private Calendar getCalendar(int position) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, (-Contact.VIEWPAGER_CURRENT) + 10);  //왜 +10을 해야하는지는 모르겠음..
+        calendar.set(Calendar.DATE, 1);  //1일 초기화 첫요일 구하기위해 필요함
+        calendar.add(Calendar.MONTH, position);
+        return calendar;
     }
 }
