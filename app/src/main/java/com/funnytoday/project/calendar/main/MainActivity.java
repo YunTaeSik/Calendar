@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.fragment.DayFragment;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setTitle(getString(R.string.bar_title_M));
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.theme)));
         initFragment();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     }
 

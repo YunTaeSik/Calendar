@@ -8,4 +8,5 @@
     <color name="theme_text">#ffffff</color>
     <color name="white">#ffffff</color>
     <color name="balck">#000000</color>
+    <color name="state_bar_color">#ffffff</color>
 </resources>

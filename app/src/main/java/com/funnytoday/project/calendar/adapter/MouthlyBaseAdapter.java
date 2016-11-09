@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
@@ -49,7 +50,7 @@ public class MouthlyBaseAdapter extends BaseAdapter {
 
         viewHolder = new ViewHolder();
         viewHolder.grid_text = (TextView) convertView.findViewById(R.id.grid_text);
-        viewHolder.grid_text.setText(String.valueOf(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)));
+        viewHolder.write_circle = (ImageView) convertView.findViewById(R.id.write_circle);
 
         String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
                 + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";
@@ -68,10 +69,14 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.balck));
         }
+
+        //Picasso.with(context).load(R.drawable.write_circle_background).fit().into(viewHolder.write_circle);
+
         return convertView;
     }
 
     private class ViewHolder {
         private TextView grid_text;
+        private ImageView write_circle;
     }
 }
