@@ -1,5 +1,6 @@
 package com.funnytoday.project.calendar.main;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.bar_title_M));
-
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.theme)));
         initFragment();
+
     }
 
     @Override
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.monthly_btn:
                 fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
                 fragmentTransaction.commit();
-
                 actionBar.setTitle(getString(R.string.bar_title_M));
                 break;
             case R.id.weekly_btn:
