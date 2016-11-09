@@ -50,18 +50,23 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         viewHolder = new ViewHolder();
         viewHolder.grid_text = (TextView) convertView.findViewById(R.id.grid_text);
         viewHolder.grid_text.setText(String.valueOf(calendar.getActualMaximum(Calendar.DAY_OF_MONTH)));
-        calendar.getMinimalDaysInFirstWeek();
+
         String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
                 + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";
+
         if (calendar.get(Calendar.DAY_OF_WEEK) - 1 > position) {  //첫날 전까지 빈칸 처리
             viewHolder.grid_text.setText(String.valueOf(""));
-         /*   Calendar cal = Calendar.getInstance();
-            cal.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-            cal.add(Calendar.DATE, -1);
-            int a = cal.get(Calendar.WEEK_OF_MONTH);
-            viewHolder.grid_text.setText(String.valueOf(a));*/
         } else {
             viewHolder.grid_text.setText(String.valueOf(position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1))); //position은 0부터시작하므로 +1 필요 그후 첫날전까지 빼줌
+            viewHolder.grid_text.setBackground(context.getResources().getDrawable(R.drawable.day_background));
+        }
+
+        if (position % 7 == 0) {
+            viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        } else if (position % 7 == 6) {
+            viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        } else {
+            viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.balck));
         }
         return convertView;
     }

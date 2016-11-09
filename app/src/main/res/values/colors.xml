@@ -6,4 +6,6 @@
     <color name="theme">#81D3EB</color>
     <color name="theme2">#555555</color>
     <color name="theme_text">#ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="balck">#000000</color>
 </resources>
