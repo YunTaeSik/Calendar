@@ -1,5 +1,9 @@
 package com.funnytoday.project.calendar.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -12,9 +16,11 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.dialog.FinishDialog;
 import com.funnytoday.project.calendar.fragment.DayFragment;
 import com.funnytoday.project.calendar.fragment.MouthFragment;
 import com.funnytoday.project.calendar.fragment.WeekFragment;
+import com.funnytoday.project.calendar.util.Contact;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
@@ -25,12 +31,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.bar_title_M));
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.theme)));
         initFragment();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setIntentFilter();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, FinishDialog.class);
+        startActivity(intent);
     }
 
     @Override
@@ -78,4 +97,20 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.main_fragment, new MouthFragment());
         fragmentTransaction.commit();
     }
+
+    private void setIntentFilter() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Contact.Real_Finish);
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Contact.Real_Finish)) {
+                finish();
+            }
+        }
+    };
 }
