@@ -1,5 +1,9 @@
 package com.funnytoday.project.calendar.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -49,6 +53,8 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mouth, container, false);
 
+        setIntentFilter();
+
         currentposition = Contact.VIEWPAGER_CURRENT;
         monthly_viewpager = (ViewPager) view.findViewById(R.id.monthly_viewpager);
         monthlyPagerAdapter = new MonthlyPagerAdapter(getContext());
@@ -56,6 +62,12 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
         monthly_viewpager.setCurrentItem(Contact.VIEWPAGER_CURRENT);
         monthly_viewpager.setOnPageChangeListener(this);
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -71,4 +83,22 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    private void setIntentFilter() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Contact.viewpager_left);
+        intentFilter.addAction(Contact.viewpager_right);
+        getContext().registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Contact.viewpager_left)) {
+                monthly_viewpager.setCurrentItem(monthly_viewpager.getCurrentItem() - 1);
+            } else if (intent.getAction().equals(Contact.viewpager_right)) {
+                monthly_viewpager.setCurrentItem(monthly_viewpager.getCurrentItem() + 1);
+            }
+        }
+    };
 }

@@ -1,16 +1,19 @@
 package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.util.Contact;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -18,7 +21,7 @@ import java.util.Calendar;
 /**
  * Created by YunTaeSik on 2016-09-11.
  */
-public class MonthlyPagerAdapter extends PagerAdapter {
+public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickListener {
     private View viewpager;
     private Context context;
     private ViewHolder viewHolder;
@@ -46,12 +49,20 @@ public class MonthlyPagerAdapter extends PagerAdapter {
 
         viewHolder.monthly_grid = (GridView) viewpager.findViewById(R.id.monthly_grid);
         viewHolder.calendar_text = (TextView) viewpager.findViewById(R.id.calendar_text);
+        viewHolder.left_image = (ImageView) viewpager.findViewById(R.id.left_image);
+        viewHolder.right_image = (ImageView) viewpager.findViewById(R.id.right_image);
+
 
         calendar = getCalendar(position);
         String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
                 + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";
         viewHolder.calendar_text.setText(cal_text);
 
+        Picasso.with(context).load(R.drawable.left_arrow).fit().into(viewHolder.left_image);
+        Picasso.with(context).load(R.drawable.right_arrow).fit().into(viewHolder.right_image);
+
+        viewHolder.left_image.setOnClickListener(this);
+        viewHolder.right_image.setOnClickListener(this);
 
         mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
         viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
@@ -70,9 +81,22 @@ public class MonthlyPagerAdapter extends PagerAdapter {
         return 1f;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.left_image:
+                context.sendBroadcast(new Intent(Contact.viewpager_left));
+                break;
+            case R.id.right_image:
+                context.sendBroadcast(new Intent(Contact.viewpager_right));
+                break;
+        }
+    }
+
     private class ViewHolder {
         private GridView monthly_grid;
         private TextView calendar_text;
+        private ImageView left_image, right_image;
     }
 
     private Calendar getCalendar(int position) {
@@ -82,4 +106,5 @@ public class MonthlyPagerAdapter extends PagerAdapter {
         calendar.add(Calendar.MONTH, position);
         return calendar;
     }
+
 }

@@ -15,9 +15,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".main.MainActivity" />
-        <activity android:name=".dialog.FinishDialog"
+        <activity
+            android:name=".dialog.FinishDialog"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog"/>
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".dialog.WriteDialog"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

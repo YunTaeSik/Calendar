@@ -1,6 +1,7 @@
 package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.dialog.WriteDialog;
 
 import java.util.Calendar;
 
@@ -69,7 +71,15 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.balck));
         }
-
+        if (viewHolder.grid_text.getText().toString() != null) {
+            viewHolder.grid_text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, WriteDialog.class);
+                    context.startActivity(intent);
+                }
+            });
+        }
         //Picasso.with(context).load(R.drawable.write_circle_background).fit().into(viewHolder.write_circle);
 
         return convertView;
