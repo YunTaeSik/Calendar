@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.adapter.MonthlyPagerAdapter;
+import com.funnytoday.project.calendar.function.WriteActivity;
 import com.funnytoday.project.calendar.util.Contact;
 import com.squareup.picasso.Picasso;
 
@@ -112,6 +113,10 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
         switch (view.getId()) {
             case R.id.close_image:
                 WriteListSetVisible(0);
+                break;
+            case R.id.write_add_btn:
+                Intent intent = new Intent(getContext(), WriteActivity.class);
+                startActivity(intent);
                 break;
         }
     }

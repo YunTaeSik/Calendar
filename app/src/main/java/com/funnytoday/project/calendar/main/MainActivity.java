@@ -20,6 +20,7 @@ import com.funnytoday.project.calendar.dialog.FinishDialog;
 import com.funnytoday.project.calendar.fragment.DayFragment;
 import com.funnytoday.project.calendar.fragment.MouthFragment;
 import com.funnytoday.project.calendar.fragment.WeekFragment;
+import com.funnytoday.project.calendar.function.WriteActivity;
 import com.funnytoday.project.calendar.util.Contact;
 
 public class MainActivity extends AppCompatActivity {
@@ -84,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.write_btn:
                 /*fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
                 fragmentTransaction.commit();*/
-
-                actionBar.setTitle(getString(R.string.write_actionbar_text));
+                Intent intent = new Intent(this, WriteActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

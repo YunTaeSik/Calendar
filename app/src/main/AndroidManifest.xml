@@ -20,7 +20,9 @@
             android:name=".dialog.FinishDialog"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" />
-
+        <activity
+            android:name=".function.WriteActivity"
+            android:parentActivityName=".main.MainActivity"></activity>
     </application>
 
 </manifest>
