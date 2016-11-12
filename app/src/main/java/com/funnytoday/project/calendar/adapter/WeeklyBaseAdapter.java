@@ -1,7 +1,6 @@
 package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
-import com.funnytoday.project.calendar.dialog.WriteDialog;
 
 import java.util.Calendar;
 
@@ -22,10 +20,12 @@ public class WeeklyBaseAdapter extends BaseAdapter {
     private ViewHolder viewHolder;
     private Calendar calendar;
     private int count;
-    public WeeklyBaseAdapter(Context context,Calendar calender){
-        this.context=context;
-        this.calendar=calender;
+
+    public WeeklyBaseAdapter(Context context, Calendar calender) {
+        this.context = context;
+        this.calendar = calender;
     }
+
     @Override
     public int getCount() {
         return 7;
@@ -43,11 +43,11 @@ public class WeeklyBaseAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertview, ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertview = layoutInflater.inflate(R.layout.weekly_gridview,parent,false);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertview = layoutInflater.inflate(R.layout.weekly_gridview, parent, false);
         viewHolder = new ViewHolder();
-        viewHolder.weekly_grid_text=(TextView)convertview.findViewById(R.id.weekly_grid_text);
-        viewHolder.weekly_write_circle=(ImageView)convertview.findViewById(R.id.weekly_write_circle);
+        viewHolder.weekly_grid_text = (TextView) convertview.findViewById(R.id.weekly_grid_text);
+        viewHolder.weekly_write_circle = (ImageView) convertview.findViewById(R.id.weekly_write_circle);
 
         if (calendar.get(Calendar.DAY_OF_WEEK) - 1 > position) {  //첫날 전까지 빈칸 처리
             viewHolder.weekly_grid_text.setText(String.valueOf(""));
@@ -67,16 +67,15 @@ public class WeeklyBaseAdapter extends BaseAdapter {
             viewHolder.weekly_grid_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, WriteDialog.class);
-                    context.startActivity(intent);
+
                 }
             });
         }
 
 
-
         return convertview;
     }
+
     private class ViewHolder {
         private TextView weekly_grid_text;
         private ImageView weekly_write_circle;
