@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
-import com.funnytoday.project.calendar.dialog.WriteDialog;
+import com.funnytoday.project.calendar.util.Contact;
 
 import java.util.Calendar;
 
@@ -46,7 +46,7 @@ public class MouthlyBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.mouthly_gridview, parent, false);
 
@@ -62,6 +62,18 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder.grid_text.setText(String.valueOf(position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1))); //position은 0부터시작하므로 +1 필요 그후 첫날전까지 빼줌
             viewHolder.grid_text.setBackground(context.getResources().getDrawable(R.drawable.day_background));
+            if (viewHolder.grid_text.getText().toString() != null) {
+                viewHolder.grid_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Contact.WRITE_CLICK);
+                        intent.putExtra(Contact.YEAR, (calendar.get(Calendar.YEAR)));
+                        intent.putExtra(Contact.MONTH, (calendar.get(Calendar.MONTH) + 1));
+                        intent.putExtra(Contact.DAY, (position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1)));
+                        context.sendBroadcast(intent);
+                    }
+                });
+            }
         }
 
         if (position % 7 == 0) {
@@ -70,15 +82,6 @@ public class MouthlyBaseAdapter extends BaseAdapter {
             viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         } else {
             viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.balck));
-        }
-        if (viewHolder.grid_text.getText().toString() != null) {
-            viewHolder.grid_text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, WriteDialog.class);
-                    context.startActivity(intent);
-                }
-            });
         }
         //Picasso.with(context).load(R.drawable.write_circle_background).fit().into(viewHolder.write_circle);
 
