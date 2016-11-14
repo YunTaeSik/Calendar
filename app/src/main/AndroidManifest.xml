@@ -22,7 +22,8 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".function.WriteActivity"
-            android:parentActivityName=".main.MainActivity"></activity>
+            android:parentActivityName=".main.MainActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>
