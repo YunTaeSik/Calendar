@@ -83,7 +83,7 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.balck));
         }
-        //Picasso.with(context).load(R.drawable.write_circle_background).fit().into(viewHolder.write_circle);
+        //Picasso.with(context).load(R.drawable.write_circle_background_two).fit().into(viewHolder.write_circle);
 
         return convertView;
     }

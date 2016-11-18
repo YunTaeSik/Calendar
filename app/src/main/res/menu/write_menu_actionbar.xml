@@ -7,7 +7,7 @@
         android:title="갤러리"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/ok_btn"
+        android:id="@+id/finish_btn"
         android:icon="@drawable/checked_image"
         android:title="확인"
         app:showAsAction="ifRoom|withText" />

@@ -8,6 +8,7 @@ public class Contact {
     public static String viewpager_left = "viewpager_left";
     public static String viewpager_right = "viewpager_right";
     public static String WRITE_CLICK = "WRITE_CLICK";
+
     public static String YEAR = "YEAR";
     public static String MONTH = "MONTH";
     public static String DAY = "DAY";

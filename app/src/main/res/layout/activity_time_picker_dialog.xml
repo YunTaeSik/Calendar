@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="3"
+        android:background="@drawable/box01"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="시간을 설정 해주세요."
+            android:textColor="#111111"
+            android:textSize="13dp" />
+
+        <NumberPicker
+            android:id="@+id/time_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/NumberPickerTextColorStyle"></NumberPicker>
+
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:text="확인"
+            android:textColor="@color/join2_btn_color"
+            android:textSize="13dp" />
+    </LinearLayout>
+</LinearLayout>

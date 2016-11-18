@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.funnytoday.project.calendar">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,9 +23,18 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" />
         <activity
+            android:name=".dialog.TimePickerDialog"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Material.Dialog" />
+        <activity
+            android:name=".dialog.DatePickerDialog"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"></activity>
+        <activity
             android:name=".function.WriteActivity"
             android:parentActivityName=".main.MainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+
     </application>
 
 </manifest>
