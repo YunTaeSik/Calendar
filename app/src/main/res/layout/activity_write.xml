@@ -150,28 +150,27 @@
         android:layout_below="@+id/title_layout"
         android:background="#cccccc" />
 
+    <EditText
+        android:id="@+id/content_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line_view"
+        android:layout_margin="10dp"
+        android:background="@null"
+        android:gravity="top"
+        android:textColor="@color/balck"
+        android:textSize="14sp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/line_view">
+        android:layout_below="@+id/content_edit">
 
         <LinearLayout
             android:id="@+id/test"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/content_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/line_view"
-                android:layout_margin="10dp"
-                android:background="@null"
-                android:gravity="top"
-                android:textColor="@color/balck"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
     </ScrollView>
 </RelativeLayout>
 

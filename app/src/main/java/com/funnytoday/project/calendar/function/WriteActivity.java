@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.funnytoday.project.calendar.R;
-import com.funnytoday.project.calendar.adapter.WriteBaseAdapter;
 import com.funnytoday.project.calendar.dialog.DatePickerDialog;
 import com.funnytoday.project.calendar.dialog.TimePickerDialog;
 import com.funnytoday.project.calendar.util.Contact;
@@ -48,9 +47,9 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private int Day;
     private int DAY_OF_WEEK;
 
-    private WriteBaseAdapter writeBaseAdapter;
+    // private WriteBaseAdapter writeBaseAdapter;
     private ArrayList<String> images = new ArrayList<>();
-    public static ArrayList<String> content = new ArrayList<>();
+    private ArrayList<String> content = new ArrayList<>();
 
     private LinearLayout test;
 
@@ -115,6 +114,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             case R.id.finish_btn:
                 if (end > start) {
                     finish();
+                    saveContent();
                 } else {
                     Toast.makeText(this, "종료시간이 시작시간보다 느려야합니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -145,15 +145,10 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_PICK_PICTURE) { //갤러리 선택
-         /*   try {
-                images.add(data.getDataString());
-            } catch (NullPointerException e) {
-            }
-            writeBaseAdapter.notifyDataSetChanged();*/
             ImageView imageView = new ImageView(this);
             EditText editText = new EditText(this);
-            Log.e("test", editText.getText().toString());
             Picasso.with(this).load(Uri.parse(data.getDataString())).into(imageView);
+            images.add(data.getDataString()); //저장
             test.addView(imageView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             test.addView(editText);
         } else if (requestCode == Time_PIRKER_START) { //시작 시간 선택
@@ -211,6 +206,21 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 return "토요일";
         }
         return "";
+    }
+
+    private void saveContent() {
+
+        for (int i = 1; i < test.getChildCount(); i += 2) {  //홀수 포문
+            EditText editText = (EditText) test.getChildAt(i);
+            content.add(editText.getText().toString());
+        }
+
+        for (int i = 0; i < images.size(); i++) {
+            Log.e("images", images.get(i));
+        }
+        for (int i = 0; i < content.size(); i++) {
+            Log.e("content", content.get(i));
+        }
     }
 
 }

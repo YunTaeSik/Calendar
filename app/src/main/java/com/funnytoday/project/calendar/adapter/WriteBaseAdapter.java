@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.funnytoday.project.calendar.R;
-import com.funnytoday.project.calendar.function.WriteActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,14 +65,14 @@ public class WriteBaseAdapter extends BaseAdapter {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.e("test", "afterTextChanged" + position);
-                WriteActivity.content.add(position, viewHolder.write_list_edit.getText().toString());
+                //   WriteActivity.content.add(position, viewHolder.write_list_edit.getText().toString());
             }
         });
         if (position > 0) {
             Picasso.with(context).load(Uri.parse(images.get(position - 1))).into(viewHolder.write_list_image);
         }
         try {
-            viewHolder.write_list_edit.setText(WriteActivity.content.get(position));
+            //  viewHolder.write_list_edit.setText(WriteActivity.content.get(position));
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
