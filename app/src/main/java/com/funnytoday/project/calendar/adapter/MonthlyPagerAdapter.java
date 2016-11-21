@@ -57,15 +57,17 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
         viewHolder = new ViewHolder();
 
         viewHolder.monthly_grid = (GridView) viewpager.findViewById(R.id.monthly_grid);
-        viewHolder.calendar_text = (TextView) viewpager.findViewById(R.id.calendar_text);
+        viewHolder.calendar_text_year = (TextView) viewpager.findViewById(R.id.calendar_text_year);
+        viewHolder.calendar_text_mouth = (TextView) viewpager.findViewById(R.id.calendar_text_mouth);
         viewHolder.left_image = (ImageView) viewpager.findViewById(R.id.left_image);
         viewHolder.right_image = (ImageView) viewpager.findViewById(R.id.right_image);
 
 
         calendar = getCalendar(position);
-        String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
-                + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";
-        viewHolder.calendar_text.setText(cal_text);
+        /*String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
+                + " " + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";*/
+        viewHolder.calendar_text_year.setText(String.valueOf(this.calendar.get(Calendar.YEAR)));
+        viewHolder.calendar_text_mouth.setText(String.valueOf(this.calendar.get(Calendar.MONTH) + 1));
 
         Picasso.with(context).load(R.drawable.left_arrow).fit().into(viewHolder.left_image);
         Picasso.with(context).load(R.drawable.right_arrow).fit().into(viewHolder.right_image);
@@ -103,7 +105,8 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
 
     private class ViewHolder {
         private GridView monthly_grid;
-        private TextView calendar_text;
+        private TextView calendar_text_year;
+        private TextView calendar_text_mouth;
         private ImageView left_image, right_image;
     }
 
