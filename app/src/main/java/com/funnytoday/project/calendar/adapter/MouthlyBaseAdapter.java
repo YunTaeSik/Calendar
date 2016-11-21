@@ -2,6 +2,11 @@ package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.db.DBManager;
 import com.funnytoday.project.calendar.util.Contact;
 
 import java.util.Calendar;
@@ -22,6 +28,9 @@ public class MouthlyBaseAdapter extends BaseAdapter {
     private ViewHolder viewHolder;
     private Calendar calendar;
     private int count;
+    private Cursor cursor;
+    private DBManager dbManager;
+    private String Day;
 
     public MouthlyBaseAdapter(Context context, Calendar calendar) {
         this.context = context;
@@ -53,14 +62,13 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         viewHolder = new ViewHolder();
         viewHolder.grid_text = (TextView) convertView.findViewById(R.id.grid_text);
         viewHolder.write_circle = (ImageView) convertView.findViewById(R.id.write_circle);
-
-        String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
-                + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";
+        viewHolder.write_count_text = (TextView) convertView.findViewById(R.id.write_count_text);
 
         if (calendar.get(Calendar.DAY_OF_WEEK) - 1 > position) {  //첫날 전까지 빈칸 처리
             viewHolder.grid_text.setText(String.valueOf(""));
         } else {
-            viewHolder.grid_text.setText(String.valueOf(position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1))); //position은 0부터시작하므로 +1 필요 그후 첫날전까지 빼줌
+            Day = String.valueOf(position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1)); //position은 0부터시작하므로 +1 필요 그후 첫날전까지 빼줌
+            viewHolder.grid_text.setText(Day);
             viewHolder.grid_text.setBackground(context.getResources().getDrawable(R.drawable.day_background));
             if (viewHolder.grid_text.getText().toString() != null) {
                 viewHolder.grid_text.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +81,13 @@ public class MouthlyBaseAdapter extends BaseAdapter {
                         context.sendBroadcast(intent);
                     }
                 });
+                try {
+                   /* AsyncTask asyncTask1 = asyncTask;
+                    asyncTask1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1));*/
+                } catch (IllegalStateException e) {
+
+                }
+                //asyncTask.execute();
             }
         }
 
@@ -91,5 +106,62 @@ public class MouthlyBaseAdapter extends BaseAdapter {
     private class ViewHolder {
         private TextView grid_text;
         private ImageView write_circle;
+        private TextView write_count_text;
     }
+
+    private AsyncTask asyncTask = new AsyncTask<Integer, Integer, Integer>() {
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            int test = Integer.parseInt(integers.toString());
+            try {
+                dbManager = new DBManager(context, "Write", null, 1);
+                SQLiteDatabase redadb = dbManager.getReadableDatabase();
+                String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + test;
+                cursor = redadb.rawQuery("select * from '" + table_name + "'", null);
+            } catch (SQLiteException e) {
+
+            }
+            if (cursor.getCount() > 0) {
+                return cursor.getCount();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            int test = Integer.parseInt(integer.toString());
+            Log.e("test", String.valueOf(test));
+        }
+        /*   @Override
+        protected Object doInBackground(Object[] objects) {
+            int test = objects;
+            try {
+                dbManager = new DBManager(context, "Write", null, 1);
+                SQLiteDatabase redadb = dbManager.getReadableDatabase();
+                String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + Day;
+                cursor = redadb.rawQuery("select * from '" + table_name + "'", null);
+            } catch (SQLiteException e) {
+
+            }
+            if (cursor.getCount() > 0) {
+                return cursor.getCount();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            int a = (int) o;
+            Log.e("onPostExecute", String.valueOf(a));
+        *//*    if (cursor_m.getCount() > 0) {
+                Picasso.with(context).load(R.drawable.write_circle_background).fit().into(viewHolder.write_circle);
+                viewHolder.write_count_text.setText("X " + String.valueOf(cursor_m.getCount()));
+            }
+            cursor_m.close();*//*
+            cursor.close();
+            dbManager.close();
+        }*/
+    };
 }

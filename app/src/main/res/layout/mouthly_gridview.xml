@@ -19,6 +19,16 @@
             android:layout_height="10dp"
             android:layout_alignParentBottom="true"
             android:layout_margin="3dp" />
+
+        <TextView
+            android:id="@+id/write_count_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="3dp"
+            android:layout_toRightOf="@+id/write_circle"
+            android:textColor="@color/theme"
+            android:textSize="8sp" />
     </RelativeLayout>
 
 

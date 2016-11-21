@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/write_item_image_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/write_item_image_background">
+
+        <ImageView
+            android:id="@+id/write_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:adjustViewBounds="true"
+            android:maxHeight="400dp"
+            android:scaleType="fitXY" />
+
+        <RelativeLayout
+            android:id="@+id/delete_image_layout"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@+id/write_item_image"
+            android:layout_alignRight="@+id/write_item_image"
+            android:background="@drawable/write_item_delete_background"
+            android:clickable="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/item_image_delete"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/write_item_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@null"
+        android:textColor="@color/balck"
+        android:textSize="14sp" />
+
+</LinearLayout>
