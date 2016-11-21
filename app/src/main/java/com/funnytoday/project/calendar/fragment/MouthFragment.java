@@ -77,6 +77,7 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
         monthlyPagerAdapter = new MonthlyPagerAdapter(getContext());
         monthly_viewpager.setAdapter(monthlyPagerAdapter);
         monthly_viewpager.setCurrentItem(Contact.VIEWPAGER_CURRENT);
+        monthly_viewpager.setOffscreenPageLimit(2);
         monthly_viewpager.setOnPageChangeListener(this);
 
         close_image = (ImageView) view.findViewById(R.id.close_image);
@@ -120,6 +121,7 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 WriteListSetVisible(0);
                 break;
             case R.id.write_add_btn:
+                WriteListSetVisible(0);
                 Intent intent = new Intent(getContext(), WriteActivity.class);
                 intent.putExtra(Contact.YEAR, Year);
                 intent.putExtra(Contact.MONTH, Month);
@@ -135,6 +137,7 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
         intentFilter.addAction(Contact.viewpager_left);
         intentFilter.addAction(Contact.viewpager_right);
         intentFilter.addAction(Contact.WRITE_CLICK);
+        intentFilter.addAction(Contact.SAVE_DB);
         getContext().registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -185,13 +188,13 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 Year = intent.getIntExtra(Contact.YEAR, 0);
                 Month = intent.getIntExtra(Contact.MONTH, 0);
                 Day = intent.getIntExtra(Contact.DAY, 0);
-
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Year, Month - 1, Day);
                 DAY_OF_WEEK = calendar.get(Calendar.DAY_OF_WEEK);
-
                 write_calendar_text.setText(Year + "." + Month + "." + Day + " " + getDayOfWeek(DAY_OF_WEEK));
                 WriteListSetVisible(1);
+            } else if (intent.getAction().equals(Contact.SAVE_DB)) {
+                monthlyPagerAdapter.notifyDataSetChanged();
             }
         }
     };

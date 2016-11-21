@@ -3,8 +3,8 @@ package com.funnytoday.project.calendar.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DataSetObservable;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.db.DBManager;
 import com.funnytoday.project.calendar.util.Contact;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -30,11 +32,23 @@ public class MouthlyBaseAdapter extends BaseAdapter {
     private int count;
     private Cursor cursor;
     private DBManager dbManager;
+    private SQLiteDatabase redadb;
     private String Day;
+    private ArrayList arrayList;
+    DataSetObservable dataSetObservable = new DataSetObservable();
+
+    public MouthlyBaseAdapter(Context context, Calendar calendar, ArrayList arrayList) {
+        this.context = context;
+        this.calendar = calendar;
+        this.arrayList = arrayList;
+    }
 
     public MouthlyBaseAdapter(Context context, Calendar calendar) {
         this.context = context;
         this.calendar = calendar;
+    }
+
+    public MouthlyBaseAdapter() {
     }
 
     @Override
@@ -81,13 +95,9 @@ public class MouthlyBaseAdapter extends BaseAdapter {
                         context.sendBroadcast(intent);
                     }
                 });
-                try {
-                   /* AsyncTask asyncTask1 = asyncTask;
-                    asyncTask1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1));*/
-                } catch (IllegalStateException e) {
-
-                }
-                //asyncTask.execute();
+                AsyncTaskObject asyncTaskObject = new AsyncTaskObject(calendar, viewHolder, position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1));
+                SearchDB searchDB = new SearchDB();
+                searchDB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskObject);
             }
         }
 
@@ -98,7 +108,6 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder.grid_text.setTextColor(context.getResources().getColor(R.color.balck));
         }
-        //Picasso.with(context).load(R.drawable.write_circle_background_two).fit().into(viewHolder.write_circle);
 
         return convertView;
     }
@@ -109,59 +118,48 @@ public class MouthlyBaseAdapter extends BaseAdapter {
         private TextView write_count_text;
     }
 
-    private AsyncTask asyncTask = new AsyncTask<Integer, Integer, Integer>() {
-        @Override
-        protected Integer doInBackground(Integer... integers) {
-            int test = Integer.parseInt(integers.toString());
-            try {
-                dbManager = new DBManager(context, "Write", null, 1);
-                SQLiteDatabase redadb = dbManager.getReadableDatabase();
-                String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + test;
-                cursor = redadb.rawQuery("select * from '" + table_name + "'", null);
-            } catch (SQLiteException e) {
+    private class AsyncTaskObject { //어싱크테스크 객체 전달을위한 클래스
+        private Calendar Acalendar;
+        private ViewHolder AviewHolder;
+        private int ADAY;
 
-            }
-            if (cursor.getCount() > 0) {
-                return cursor.getCount();
-            } else {
-                return 0;
-            }
+        private AsyncTaskObject(Calendar calendar, ViewHolder viewHolder, int day) {
+            this.Acalendar = calendar;
+            this.AviewHolder = viewHolder;
+            this.ADAY = day;
         }
+    }
+
+    private class SearchDB extends AsyncTask {
+        Calendar c;
+        ViewHolder v;
+        int i;
 
         @Override
-        protected void onPostExecute(Integer integer) {
-            int test = Integer.parseInt(integer.toString());
-            Log.e("test", String.valueOf(test));
-        }
-        /*   @Override
         protected Object doInBackground(Object[] objects) {
-            int test = objects;
+            AsyncTaskObject asyncTaskObject = (AsyncTaskObject) objects[0];
+            c = asyncTaskObject.Acalendar;
+            v = asyncTaskObject.AviewHolder;
+            i = asyncTaskObject.ADAY;
+            dbManager = new DBManager(context, "Write", null, 1);
+            redadb = dbManager.getReadableDatabase();
+            String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(i);
+            Log.e("test", table_name);
             try {
-                dbManager = new DBManager(context, "Write", null, 1);
-                SQLiteDatabase redadb = dbManager.getReadableDatabase();
-                String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + Day;
-                cursor = redadb.rawQuery("select * from '" + table_name + "'", null);
-            } catch (SQLiteException e) {
-
-            }
-            if (cursor.getCount() > 0) {
+                cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
                 return cursor.getCount();
-            } else {
+            } catch (Exception e) {
                 return 0;
             }
         }
 
-        @Override
         protected void onPostExecute(Object o) {
-            int a = (int) o;
-            Log.e("onPostExecute", String.valueOf(a));
-        *//*    if (cursor_m.getCount() > 0) {
-                Picasso.with(context).load(R.drawable.write_circle_background).fit().into(viewHolder.write_circle);
-                viewHolder.write_count_text.setText("X " + String.valueOf(cursor_m.getCount()));
+            int count = (int) o;
+            if (count > 0) {
+                Picasso.with(context).load(R.drawable.write_circle_background).fit().into(v.write_circle);
+                v.write_count_text.setText("X " + count);
             }
-            cursor_m.close();*//*
-            cursor.close();
-            dbManager.close();
-        }*/
-    };
+        }
+    }
 }
+

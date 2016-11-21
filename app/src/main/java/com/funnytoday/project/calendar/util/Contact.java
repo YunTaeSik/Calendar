@@ -5,6 +5,7 @@ package com.funnytoday.project.calendar.util;
  */
 public class Contact {
     public static String Real_Finish = "Real_Finish";
+    public static String SAVE_DB = "SAVE_DB";
     public static String viewpager_left = "viewpager_left";
     public static String viewpager_right = "viewpager_right";
     public static String WRITE_CLICK = "WRITE_CLICK";

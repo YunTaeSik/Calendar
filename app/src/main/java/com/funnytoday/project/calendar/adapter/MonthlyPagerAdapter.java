@@ -2,6 +2,8 @@ package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -12,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.db.DBManager;
 import com.funnytoday.project.calendar.util.Contact;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -27,6 +31,11 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
     private ViewHolder viewHolder;
     private MouthlyBaseAdapter mouthlyBaseAdapter;
     private Calendar calendar;
+    private Cursor cursor;
+    private DBManager dbManager;
+    private SQLiteDatabase redadb;
+
+    private ArrayList list = new ArrayList<>();
 
     public MonthlyPagerAdapter(Context context) {
         this.context = context;
@@ -63,7 +72,6 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
 
         viewHolder.left_image.setOnClickListener(this);
         viewHolder.right_image.setOnClickListener(this);
-
         mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
         viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
 
@@ -107,4 +115,11 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
         return calendar;
     }
 
+    @Override
+
+    public int getItemPosition(Object object) {
+
+        return POSITION_NONE;
+
+    }
 }

@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,8 +55,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private TextView year_text;
     private EditText title_edit;
     private EditText content_edit;
-    private ListView write_list;
-
     private int Year;
     private int Month;
     private int Day;
@@ -77,6 +74,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private Canvas canvas;
     private DBManager dbManager;
     private String jsonArray;
+
+    private int add_count = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,23 +158,24 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 startActivityForResult(new Intent(this, TimePickerDialog.class), Time_PIRKER_END);
                 break;
             case R.id.delete_image_layout:
-                //Toast.makeText(this, String.valueOf(view.getTag()), Toast.LENGTH_SHORT).show();
-                if (write_addlayout.getChildCount() - 1 <= 1) { //write_layout 에 기본적으로 EDITEXT가 하나 있기떄문에 -1을한다.
-                    LinearLayout linearLayout =
-                            (LinearLayout) write_addlayout.getChildAt(Integer.parseInt(String.valueOf(view.getTag())) - 1); // edit 요소를 가져오기위한 배열
+                Toast.makeText(this, String.valueOf(view.getTag()), Toast.LENGTH_SHORT).show();
+                for (int i = 1; i < write_addlayout.getChildCount(); i++) {
+                    LinearLayout linearLayout = (LinearLayout) write_addlayout.getChildAt(i);
+                    RelativeLayout relativeLayout = (RelativeLayout) linearLayout.getChildAt(0);
                     EditText editText = (EditText) linearLayout.getChildAt(1);
-                    content_edit.append("\n" + editText.getText().toString());
-                } else {
-                    LinearLayout deletelayout =
-                            (LinearLayout) write_addlayout.getChildAt(Integer.parseInt(String.valueOf(view.getTag())) - 1); // edit 요소를 가져오기위한 배열
-                    EditText delete_edit = (EditText) deletelayout.getChildAt(1);
-                    LinearLayout addlayout =
-                            (LinearLayout) write_addlayout.getChildAt(Integer.parseInt(String.valueOf(view.getTag())) - 2); // edit 요소를 가져오기위한 배열
-                    EditText add_edit = (EditText) addlayout.getChildAt(1);
-                    add_edit.append("\n" + delete_edit.getText().toString());
+                    RelativeLayout relativeLayout2 = (RelativeLayout) relativeLayout.getChildAt(1);
+                    if (String.valueOf(view.getTag()).equals(String.valueOf(relativeLayout2.getTag()))) {
+                        images.remove(i - 1);
+                        write_addlayout.removeViewAt(i);
+                        if (write_addlayout.getChildCount() - 1 <= 1) {
+                            content_edit.append("\n" + editText.getText().toString());
+                        } else {
+                            LinearLayout addlinear = (LinearLayout) write_addlayout.getChildAt(i - 1);  //전위치 에 edittext 추가
+                            EditText addedit = (EditText) addlinear.getChildAt(1);
+                            addedit.append("\n" + editText.getText().toString()); //
+                        }
+                    }
                 }
-                images.remove(Integer.parseInt(String.valueOf(view.getTag())) - 1);
-                write_addlayout.removeViewAt((Integer) view.getTag() - 1);
                 break;
         }
 
@@ -185,6 +185,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_PICK_PICTURE) { //갤러리 선택
             try {
+                add_count++;
+
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout itemview = (LinearLayout) layoutInflater.inflate(R.layout.write_item_view, null);
                 ImageView imageView = (ImageView) itemview.findViewById(R.id.write_item_image);
@@ -193,6 +195,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
                 Picasso.with(this).load(R.drawable.delete_image).into(delete);
                 delete_image_layout.setOnClickListener(this);
+
 
                 Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                 if (canvas.getMaximumBitmapHeight() / 8 < image_bitmap.getHeight()
@@ -203,10 +206,13 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 images.add(data.getDataString()); //images data list 추가
-
                 write_addlayout.addView(itemview);
 
-                delete_image_layout.setTag(write_addlayout.getChildCount()); //delete tag 추가
+                int indexValue = write_addlayout.indexOfChild(itemview);
+                itemview.setTag(Integer.toString(indexValue));
+
+                delete_image_layout.setTag(Integer.toString(indexValue)); //delete tag 추가
+
             } catch (NullPointerException e) {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -313,6 +319,10 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 e.printStackTrace();
                 Log.e("WriteActivity", "DB 저장 실패");
             }
+             sendBroadcast(new Intent(Contact.SAVE_DB));
+           /* MouthlyBaseAdapter mouthlyBaseAdapter = new MouthlyBaseAdapter();
+            mouthlyBaseAdapter.test();*/
+            //Toast.makeText(getApplicationContext(), String.valueOf(mouthlyBaseAdapter.getCount()), Toast.LENGTH_SHORT).show();
         }
     };
 
