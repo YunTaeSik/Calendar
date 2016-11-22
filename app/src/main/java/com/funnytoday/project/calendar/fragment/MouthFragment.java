@@ -44,6 +44,8 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
     private int Day;
     private int DAY_OF_WEEK;
 
+    public static String getWriteVisible = "GONE";
+
     public MouthFragment() {
     }
 
@@ -138,6 +140,7 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
         intentFilter.addAction(Contact.viewpager_right);
         intentFilter.addAction(Contact.WRITE_CLICK);
         intentFilter.addAction(Contact.SAVE_DB);
+        intentFilter.addAction(Contact.WRITE_LIST_GONE);
         getContext().registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -147,12 +150,14 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 Animation animation_v = AnimationUtils.loadAnimation(getContext(), R.anim.write_animation_v);
                 write_list_layout.startAnimation(animation_v);
                 write_list_layout.setVisibility(View.VISIBLE);
+                getWriteVisible = "VISIBLE";
             }
         } else if (VISIBLE == 0) {
             if (write_list_layout.getVisibility() != View.GONE) {
                 Animation animation_g = AnimationUtils.loadAnimation(getContext(), R.anim.write_animation_g);
                 write_list_layout.startAnimation(animation_g);
                 write_list_layout.setVisibility(View.GONE);
+                getWriteVisible = "GONE";
             }
         }
     }
@@ -195,6 +200,8 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 WriteListSetVisible(1);
             } else if (intent.getAction().equals(Contact.SAVE_DB)) {
                 monthlyPagerAdapter.notifyDataSetChanged();
+            } else if (intent.getAction().equals(Contact.WRITE_LIST_GONE)) {
+                WriteListSetVisible(0);
             }
         }
     };

@@ -16,28 +16,36 @@
             android:layout_height="50dp"
             android:background="@color/theme">
 
-            <TextView
-                android:id="@+id/calendar_text_year"
+            <RelativeLayout
+                android:id="@+id/calendar_text_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="15dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="3dp"
-                android:gravity="bottom"
-                android:text="2016"
-                android:textColor="@color/white"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/calendar_text_mouth"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_alignParentBottom="true"
+                android:layout_height="50dp"
                 android:layout_centerInParent="true"
-                android:gravity="top"
-                android:text="11"
-                android:textColor="@color/white"
-                android:textSize="23sp" />
+                android:background="@drawable/calendar_layout_background">
+
+                <TextView
+                    android:id="@+id/calendar_text_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:gravity="bottom"
+                    android:text="2016"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/calendar_text_mouth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="top"
+                    android:text="11"
+                    android:textColor="@color/white"
+                    android:textSize="23sp" />
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/left_image"
@@ -45,7 +53,7 @@
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:layout_toLeftOf="@+id/calendar_text_mouth" />
+                android:layout_toLeftOf="@+id/calendar_text_layout" />
 
             <ImageView
                 android:id="@+id/right_image"
@@ -53,7 +61,7 @@
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@+id/calendar_text_mouth" />
+                android:layout_toRightOf="@+id/calendar_text_layout" />
         </RelativeLayout>
 
 

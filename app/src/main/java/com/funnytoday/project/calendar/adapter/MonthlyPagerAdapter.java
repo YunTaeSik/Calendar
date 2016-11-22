@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
@@ -56,6 +57,7 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
         viewpager = LayoutInflater.from(context).inflate(R.layout.monthly_viewpager, null);
         viewHolder = new ViewHolder();
 
+        viewHolder.calendar_text_layout = (RelativeLayout) viewpager.findViewById(R.id.calendar_text_layout);
         viewHolder.monthly_grid = (GridView) viewpager.findViewById(R.id.monthly_grid);
         viewHolder.calendar_text_year = (TextView) viewpager.findViewById(R.id.calendar_text_year);
         viewHolder.calendar_text_mouth = (TextView) viewpager.findViewById(R.id.calendar_text_mouth);
@@ -74,6 +76,7 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
 
         viewHolder.left_image.setOnClickListener(this);
         viewHolder.right_image.setOnClickListener(this);
+        viewHolder.calendar_text_layout.setOnClickListener(this);
         mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
         viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
 
@@ -100,10 +103,13 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
             case R.id.right_image:
                 context.sendBroadcast(new Intent(Contact.viewpager_right));
                 break;
+            case R.id.calendar_text_layout:
+                break;
         }
     }
 
     private class ViewHolder {
+        private RelativeLayout calendar_text_layout;
         private GridView monthly_grid;
         private TextView calendar_text_year;
         private TextView calendar_text_mouth;

@@ -49,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, FinishDialog.class);
-        startActivity(intent);
+        if (MouthFragment.getWriteVisible.equals("GONE")) {
+            Intent intent = new Intent(this, FinishDialog.class);
+            startActivity(intent);
+        } else {
+            sendBroadcast(new Intent(Contact.WRITE_LIST_GONE));
+        }
     }
 
     @Override
@@ -83,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 actionBar.setTitle(getString(R.string.bar_title_D));
                 break;
             case R.id.write_btn:
-                /*fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
-                fragmentTransaction.commit();*/
                 Intent intent = new Intent(this, WriteActivity.class);
                 startActivity(intent);
                 break;
