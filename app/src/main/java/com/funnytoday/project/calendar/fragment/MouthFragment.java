@@ -257,8 +257,12 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 }
             } catch (SQLiteException e) {
             }
-            cursor.close();
-            redadb.close();
+            try {
+                cursor.close();
+                redadb.close();
+            } catch (NullPointerException e) {
+
+            }
             return null;
         }
 

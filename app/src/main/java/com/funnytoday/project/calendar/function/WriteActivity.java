@@ -68,8 +68,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
     private TextView start_time_text;
     private TextView end_time_text;
-    private int start = 0;
-    private int end = 0;
+    private int start = 1;
+    private int end = 1;
 
     private Canvas canvas;
     private DBManager dbManager;
@@ -132,8 +132,12 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.finish_btn:
                 if (end > start) {
-                    finish();
-                    saveContent();
+                    if (title_edit.getText().toString().equals("")) {
+                        Toast.makeText(this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+                    } else {
+                        finish();
+                        saveContent();
+                    }
                 } else {
                     Toast.makeText(this, "종료시간이 시작시간보다 느려야합니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -319,7 +323,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 e.printStackTrace();
                 Log.e("WriteActivity", "DB 저장 실패");
             }
-             sendBroadcast(new Intent(Contact.SAVE_DB));
+            sendBroadcast(new Intent(Contact.SAVE_DB));
            /* MouthlyBaseAdapter mouthlyBaseAdapter = new MouthlyBaseAdapter();
             mouthlyBaseAdapter.test();*/
             //Toast.makeText(getApplicationContext(), String.valueOf(mouthlyBaseAdapter.getCount()), Toast.LENGTH_SHORT).show();
