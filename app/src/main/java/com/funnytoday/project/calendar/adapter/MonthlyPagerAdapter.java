@@ -2,8 +2,6 @@ package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -15,12 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
-import com.funnytoday.project.calendar.db.DBManager;
 import com.funnytoday.project.calendar.util.Contact;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.funnytoday.project.calendar.R.id.calendar_text_year;
 
 
 /**
@@ -32,11 +30,7 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
     private ViewHolder viewHolder;
     private MouthlyBaseAdapter mouthlyBaseAdapter;
     private Calendar calendar;
-    private Cursor cursor;
-    private DBManager dbManager;
-    private SQLiteDatabase redadb;
 
-    private ArrayList list = new ArrayList<>();
 
     public MonthlyPagerAdapter(Context context) {
         this.context = context;
@@ -57,17 +51,15 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
         viewpager = LayoutInflater.from(context).inflate(R.layout.monthly_viewpager, null);
         viewHolder = new ViewHolder();
 
+
         viewHolder.calendar_text_layout = (RelativeLayout) viewpager.findViewById(R.id.calendar_text_layout);
         viewHolder.monthly_grid = (GridView) viewpager.findViewById(R.id.monthly_grid);
-        viewHolder.calendar_text_year = (TextView) viewpager.findViewById(R.id.calendar_text_year);
+        viewHolder.calendar_text_year = (TextView) viewpager.findViewById(calendar_text_year);
         viewHolder.calendar_text_mouth = (TextView) viewpager.findViewById(R.id.calendar_text_mouth);
         viewHolder.left_image = (ImageView) viewpager.findViewById(R.id.left_image);
         viewHolder.right_image = (ImageView) viewpager.findViewById(R.id.right_image);
 
-
         calendar = getCalendar(position);
-        /*String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
-                + " " + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월";*/
         viewHolder.calendar_text_year.setText(String.valueOf(this.calendar.get(Calendar.YEAR)));
         viewHolder.calendar_text_mouth.setText(String.valueOf(this.calendar.get(Calendar.MONTH) + 1));
 
@@ -79,7 +71,6 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
         viewHolder.calendar_text_layout.setOnClickListener(this);
         mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
         viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
-
         container.addView(viewpager);
         return viewpager;
     }
@@ -103,8 +94,12 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
             case R.id.right_image:
                 context.sendBroadcast(new Intent(Contact.viewpager_right));
                 break;
-            case R.id.calendar_text_layout:
-                break;
+       /*     case R.id.calendar_text_layout:
+                Intent intent = new Intent(context, CalendarSelectDialog.class);
+                intent.putExtra(Contact.YEAR, viewHolder.calendar_text_year.getText().toString());
+                intent.putExtra(Contact.MONTH, viewHolder.calendar_text_mouth.getText().toString());
+                context.startActivity(intent);
+                break;*/
         }
     }
 
@@ -131,4 +126,18 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
         return POSITION_NONE;
 
     }
+
+    /*private BroadcastReceiver MonthlybroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Contact.SELECT_CALENDAR)) {
+                calendar = Calendar.getInstance();
+                viewHolder.calendar_text_year.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+                viewHolder.calendar_text_mouth.setText(String.valueOf(calendar.get(Calendar.MONTH) + 1));
+                mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
+                viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
+                mouthlyBaseAdapter.notifyDataSetChanged();
+            }
+        }
+    };*/
 }

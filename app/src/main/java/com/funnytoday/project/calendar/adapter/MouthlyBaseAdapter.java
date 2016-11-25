@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.DataSetObservable;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,13 +140,15 @@ public class MouthlyBaseAdapter extends BaseAdapter {
             c = asyncTaskObject.Acalendar;
             v = asyncTaskObject.AviewHolder;
             i = asyncTaskObject.ADAY;
-            dbManager = new DBManager(context, "Write", null, 1);
-            redadb = dbManager.getReadableDatabase();
-            String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(i);
-            Log.e("test", table_name);
             try {
+                dbManager = new DBManager(context, "Write", null, 1);
+                redadb = dbManager.getReadableDatabase();
+                String table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(i);
                 cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
-                return cursor.getCount();
+                int count = cursor.getCount();
+                cursor.close();
+                redadb.close();
+                return count;
             } catch (Exception e) {
                 return 0;
             }

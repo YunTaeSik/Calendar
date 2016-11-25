@@ -32,6 +32,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.DeviceDefault.Dialog"></activity>
         <activity
+            android:name=".dialog.CalendarSelectDialog"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Material.Dialog"></activity>
+        <activity
             android:name=".function.WriteActivity"
             android:parentActivityName=".main.MainActivity"
             android:windowSoftInputMode="adjustPan" />

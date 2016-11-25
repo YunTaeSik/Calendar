@@ -325,13 +325,13 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             //Toast.makeText(getApplicationContext(), String.valueOf(mouthlyBaseAdapter.getCount()), Toast.LENGTH_SHORT).show();
         }
     };
-
+/*
     private void Read() {
-   /*     JSONObject jsnobject = new JSONObject(arrayList);
+        JSONObject jsnobject = new JSONObject(arrayList);
         JSONArray ja = jsnobject.getJSONArray("content");
         ArrayList<String> listdata = new ArrayList<>();
         for (int i = 0; i < ja.length(); i++) {
             listdata.add(ja.get(i).toString());
-        }*/
-    }
+        }
+    }*/
 }

@@ -4,9 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +24,13 @@ import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.adapter.MonthlyPagerAdapter;
+import com.funnytoday.project.calendar.adapter.WriteRecyAdapter;
+import com.funnytoday.project.calendar.db.DBManager;
 import com.funnytoday.project.calendar.function.WriteActivity;
 import com.funnytoday.project.calendar.util.Contact;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MouthFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -34,10 +43,15 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
     private ViewPager monthly_viewpager;
     private MonthlyPagerAdapter monthlyPagerAdapter;
     private int currentposition;
+
+    private TextView null_calendar_text;
     private ImageView close_image;
     private LinearLayout write_list_layout;
     private TextView write_calendar_text;
     private ImageView write_add_btn;
+    private RecyclerView write_recycleview;
+    private WriteRecyAdapter writeRecyAdapter;
+    private RecyclerView.LayoutManager R_layoutManager;
 
     private int Year;
     private int Month;
@@ -45,6 +59,10 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
     private int DAY_OF_WEEK;
 
     public static String getWriteVisible = "GONE";
+
+    private DBManager dbManager;
+    private SQLiteDatabase redadb;
+    private Cursor cursor;
 
     public MouthFragment() {
     }
@@ -86,6 +104,9 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
         write_list_layout = (LinearLayout) view.findViewById(R.id.write_list_layout);
         write_calendar_text = (TextView) view.findViewById(R.id.write_calendar_text);
         write_add_btn = (ImageView) view.findViewById(R.id.write_add_btn);
+        null_calendar_text = (TextView) view.findViewById(R.id.null_calendar_text);
+
+        write_recycleview = (RecyclerView) view.findViewById(R.id.write_recycleview);
 
         Picasso.with(getContext()).load(R.drawable.close_image).fit().into(close_image);
         Picasso.with(getContext()).load(R.drawable.write_add_image).fit().into(write_add_btn);
@@ -198,6 +219,9 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 DAY_OF_WEEK = calendar.get(Calendar.DAY_OF_WEEK);
                 write_calendar_text.setText(Year + "." + Month + "." + Day + " " + getDayOfWeek(DAY_OF_WEEK));
                 WriteListSetVisible(1);
+                AsyncTask asyncTask = new asyncTask();
+                asyncTask.execute();
+                // setWriteListView(Year, Month, Day);
             } else if (intent.getAction().equals(Contact.SAVE_DB)) {
                 monthlyPagerAdapter.notifyDataSetChanged();
             } else if (intent.getAction().equals(Contact.WRITE_LIST_GONE)) {
@@ -205,4 +229,97 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
             }
         }
     };
+
+    private void setWriteListView(int Year, int Month, int Day) {
+     /*   dbManager = new DBManager(getContext(), "Write", null, 1);
+        redadb = dbManager.getReadableDatabase();
+        String table_name = String.valueOf(Year) + String.valueOf(Month) + String.valueOf(Day);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Year);
+        calendar.set(Calendar.MONTH, Month - 1);
+        calendar.set(Calendar.DATE, Day);
+
+        ArrayList starttime = new ArrayList();
+        ArrayList endtime = new ArrayList();
+        ArrayList title = new ArrayList();
+        ArrayList jsonarray = new ArrayList();
+
+        try {
+            cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                starttime.add(cursor.getString(1));
+                endtime.add(cursor.getString(2));
+                title.add(cursor.getString(3));
+                jsonarray.add(cursor.getString(4));
+            }
+            cursor.close();
+            write_recycleview.setVisibility(View.VISIBLE);
+            null_calendar_text.setVisibility(View.GONE);
+        } catch (SQLiteException e) {
+            write_recycleview.setVisibility(View.GONE);
+            null_calendar_text.setVisibility(View.VISIBLE);
+        }
+        redadb.close();
+        write_recycleview.setHasFixedSize(true);
+        R_layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        write_recycleview.setLayoutManager(R_layoutManager);
+        writeRecyAdapter = new WriteRecyAdapter(getContext(), starttime, endtime, title, jsonarray, calendar); //값이 있을때
+        write_recycleview.setAdapter(writeRecyAdapter);*/
+    }
+
+    private class asyncTask extends AsyncTask {
+        ArrayList starttime = new ArrayList();
+        ArrayList endtime = new ArrayList();
+        ArrayList title = new ArrayList();
+        ArrayList jsonarray = new ArrayList();
+        Calendar calendar;
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            dbManager = new DBManager(getContext(), "Write", null, 1);
+            redadb = dbManager.getReadableDatabase();
+            String table_name = String.valueOf(Year) + String.valueOf(Month) + String.valueOf(Day);
+
+            calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, Year);
+            calendar.set(Calendar.MONTH, Month - 1);
+            calendar.set(Calendar.DATE, Day);
+            try {
+                cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    cursor.moveToPosition(i);
+                    starttime.add(cursor.getString(1));
+                    endtime.add(cursor.getString(2));
+                    title.add(cursor.getString(3));
+                    jsonarray.add(cursor.getString(4));
+                }
+            } catch (SQLiteException e) {
+            }
+            cursor.close();
+            redadb.close();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if (starttime.size() > 0) {
+                write_recycleview.setVisibility(View.VISIBLE);
+                null_calendar_text.setVisibility(View.GONE);
+            } else {
+                write_recycleview.setVisibility(View.GONE);
+                null_calendar_text.setVisibility(View.VISIBLE);
+            }
+            write_recycleview.setHasFixedSize(true);
+            R_layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            write_recycleview.setLayoutManager(R_layoutManager);
+            writeRecyAdapter = new WriteRecyAdapter(getContext(), starttime, endtime, title, jsonarray, calendar); //값이 있을때
+            write_recycleview.setAdapter(writeRecyAdapter);
+        }
+    }
+
+    ;
+
 }
