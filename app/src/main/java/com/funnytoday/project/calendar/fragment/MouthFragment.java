@@ -221,7 +221,6 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
                 WriteListSetVisible(1);
                 AsyncTask asyncTask = new asyncTask();
                 asyncTask.execute();
-                // setWriteListView(Year, Month, Day);
             } else if (intent.getAction().equals(Contact.SAVE_DB)) {
                 monthlyPagerAdapter.notifyDataSetChanged();
             } else if (intent.getAction().equals(Contact.WRITE_LIST_GONE)) {
@@ -229,45 +228,6 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
             }
         }
     };
-
-    private void setWriteListView(int Year, int Month, int Day) {
-     /*   dbManager = new DBManager(getContext(), "Write", null, 1);
-        redadb = dbManager.getReadableDatabase();
-        String table_name = String.valueOf(Year) + String.valueOf(Month) + String.valueOf(Day);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, Year);
-        calendar.set(Calendar.MONTH, Month - 1);
-        calendar.set(Calendar.DATE, Day);
-
-        ArrayList starttime = new ArrayList();
-        ArrayList endtime = new ArrayList();
-        ArrayList title = new ArrayList();
-        ArrayList jsonarray = new ArrayList();
-
-        try {
-            cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition(i);
-                starttime.add(cursor.getString(1));
-                endtime.add(cursor.getString(2));
-                title.add(cursor.getString(3));
-                jsonarray.add(cursor.getString(4));
-            }
-            cursor.close();
-            write_recycleview.setVisibility(View.VISIBLE);
-            null_calendar_text.setVisibility(View.GONE);
-        } catch (SQLiteException e) {
-            write_recycleview.setVisibility(View.GONE);
-            null_calendar_text.setVisibility(View.VISIBLE);
-        }
-        redadb.close();
-        write_recycleview.setHasFixedSize(true);
-        R_layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        write_recycleview.setLayoutManager(R_layoutManager);
-        writeRecyAdapter = new WriteRecyAdapter(getContext(), starttime, endtime, title, jsonarray, calendar); //값이 있을때
-        write_recycleview.setAdapter(writeRecyAdapter);*/
-    }
 
     private class asyncTask extends AsyncTask {
         ArrayList starttime = new ArrayList();
@@ -319,7 +279,4 @@ public class MouthFragment extends Fragment implements ViewPager.OnPageChangeLis
             write_recycleview.setAdapter(writeRecyAdapter);
         }
     }
-
-    ;
-
 }
