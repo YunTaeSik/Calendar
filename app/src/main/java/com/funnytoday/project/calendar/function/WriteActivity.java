@@ -75,7 +75,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private DBManager dbManager;
     private String jsonArray;
 
-    private int add_count = 1;
+    private int add_count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,12 +171,16 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     if (String.valueOf(view.getTag()).equals(String.valueOf(relativeLayout2.getTag()))) {
                         images.remove(i - 1);
                         write_addlayout.removeViewAt(i);
-                        if (write_addlayout.getChildCount() - 1 <= 1) {
-                            content_edit.append("\n" + editText.getText().toString());
+                        if (i > 1) {
+                            if (write_addlayout.getChildCount() - 1 <= 1) {
+                                content_edit.append("\n" + editText.getText().toString());
+                            } else {
+                                LinearLayout addlinear = (LinearLayout) write_addlayout.getChildAt(i - 1);  //전위치 에 edittext 추가
+                                EditText addedit = (EditText) addlinear.getChildAt(1);
+                                addedit.append("\n" + editText.getText().toString()); //
+                            }
                         } else {
-                            LinearLayout addlinear = (LinearLayout) write_addlayout.getChildAt(i - 1);  //전위치 에 edittext 추가
-                            EditText addedit = (EditText) addlinear.getChildAt(1);
-                            addedit.append("\n" + editText.getText().toString()); //
+                            content_edit.append("\n" + editText.getText().toString());
                         }
                     }
                 }
@@ -212,11 +216,12 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 images.add(data.getDataString()); //images data list 추가
                 write_addlayout.addView(itemview);
 
-                int indexValue = write_addlayout.indexOfChild(itemview);
+              /*  int indexValue = write_addlayout.indexOfChild(itemview);
                 itemview.setTag(Integer.toString(indexValue));
-
                 delete_image_layout.setTag(Integer.toString(indexValue)); //delete tag 추가
-
+*/
+                delete_image_layout.setTag(add_count);
+                add_count++;
             } catch (NullPointerException e) {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -313,8 +318,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 String table_name = Year + month_text.getText().toString() + Day;
                 db.execSQL("CREATE TABLE if not exists '" + table_name + "'( _id INTEGER PRIMARY KEY AUTOINCREMENT, start TEXT, end TEXT, title TEXT, json TEXT);");
                 ContentValues values = new ContentValues();
-                values.put("start", start_time_text.getText().toString());
-                values.put("end", end_time_text.getText().toString());
+                values.put("start", String.valueOf(start));
+                values.put("end", String.valueOf(end));
                 values.put("title", title_edit.getText().toString());
                 values.put("json", jsonArray);
                 db.insert("'" + table_name + "'", null, values);

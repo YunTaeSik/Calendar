@@ -16,6 +16,7 @@ public class Contact {
     public static String MONTH = "MONTH";
     public static String DAY = "DAY";
     public static String DAY_OF_WEEK = "DAY_OF_WEEK";
+    public static String POSITION = "POSITION";
     public static int VIEWPAGER_MAX = 1000;
     public static int VIEWPAGER_CURRENT = 499;
 

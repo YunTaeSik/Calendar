@@ -1,10 +1,12 @@
 package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.function.WriteModifyActivity;
+import com.funnytoday.project.calendar.util.Contact;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -37,6 +42,10 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
     private ArrayList title = new ArrayList();
     private ArrayList jsonarray = new ArrayList();
     private Calendar tablename;
+    private String Year;
+    private String Month;
+    private String DAY;
+    private String DAY_OF_WEEK;
 
 
     public WriteRecyAdapter(Context context, ArrayList starttime, ArrayList endtime, ArrayList title, ArrayList jsonarray, Calendar tablename) {
@@ -56,12 +65,16 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         canvas = new Canvas();
         String get_title = String.valueOf(title.get(position)); //title
         String get_starttime = String.valueOf(starttime.get(position)); // 시작 시간
         String get_endtime = String.valueOf(endtime.get(position)); // 종료 시간
         String get_jsonArray = String.valueOf(jsonarray.get(position)); //이미지, 내용
+        Year = String.valueOf(tablename.get(Calendar.YEAR));
+        Month = String.valueOf(tablename.get(Calendar.MONTH) + 1);
+        DAY = String.valueOf(tablename.get(Calendar.DATE));
+        DAY_OF_WEEK = String.valueOf(tablename.get(Calendar.DAY_OF_WEEK));
         JSONObject jsnobject = null;
         try {
             jsnobject = new JSONObject(get_jsonArray);
@@ -99,9 +112,26 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
         }
 
         holder.card_title_view.setText(get_title);
-        holder.card_start_time_view.setText(get_starttime.replace("\n" + "hour", "시 ~"));
-        holder.card_end_time_view.setText(" " + get_endtime.replace("\n" + "Hour", "시"));
+       /* holder.card_start_time_view.setText(get_starttime.replace("\n" + "hour", "시 ~"));
+        holder.card_end_time_view.setText(" " + get_endtime.replace("\n" + "Hour", "시"));*/
+        holder.card_start_time_view.setText(get_starttime + "시 ~");
+        holder.card_end_time_view.setText(" " + get_endtime + "시");
         holder.card_position_view.setText(String.valueOf(position + 1));
+
+        holder.card_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, WriteModifyActivity.class);
+                intent.putExtra(Contact.YEAR, Year);
+                intent.putExtra(Contact.MONTH, Month);
+                intent.putExtra(Contact.DAY, DAY);
+                intent.putExtra(Contact.DAY_OF_WEEK, DAY_OF_WEEK);
+                intent.putExtra(Contact.POSITION, position);
+                context.startActivity(intent);
+                Toast.makeText(context, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                context.sendBroadcast(new Intent(Contact.WRITE_LIST_GONE));
+            }
+        });
     }
 
 
@@ -114,6 +144,7 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
         private ImageView card_image;
         private TextView card_position_view, card_title_view, card_content_view, card_start_time_view, card_end_time_view;
         private TextView card_sub_time_view;
+        private CardView card_view;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -124,6 +155,7 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
             card_start_time_view = (TextView) itemView.findViewById(R.id.card_start_time_view);
             card_end_time_view = (TextView) itemView.findViewById(R.id.card_end_time_view);
             card_sub_time_view = (TextView) itemView.findViewById(R.id.card_sub_time_view);
+            card_view = (CardView) itemView.findViewById(R.id.card_view);
         }
     }
 }

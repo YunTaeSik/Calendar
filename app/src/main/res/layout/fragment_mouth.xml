@@ -86,6 +86,5 @@
                 android:layout_marginTop="5dp"
                 android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
-
     </LinearLayout>
 </FrameLayout>

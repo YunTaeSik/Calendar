@@ -122,22 +122,6 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
     @Override
 
     public int getItemPosition(Object object) {
-
         return POSITION_NONE;
-
     }
-
-    /*private BroadcastReceiver MonthlybroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Contact.SELECT_CALENDAR)) {
-                calendar = Calendar.getInstance();
-                viewHolder.calendar_text_year.setText(String.valueOf(calendar.get(Calendar.YEAR)));
-                viewHolder.calendar_text_mouth.setText(String.valueOf(calendar.get(Calendar.MONTH) + 1));
-                mouthlyBaseAdapter = new MouthlyBaseAdapter(context, calendar);
-                viewHolder.monthly_grid.setAdapter(mouthlyBaseAdapter);
-                mouthlyBaseAdapter.notifyDataSetChanged();
-            }
-        }
-    };*/
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/delete_btn"
+        android:title="삭제"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/modify_btn"
+        android:title="편집"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/gallery_btn"
+        android:title="갤러리"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/finish_btn"
+        android:title="완료"
+        android:visible="false"
+        app:showAsAction="always|withText" />
+</menu>
