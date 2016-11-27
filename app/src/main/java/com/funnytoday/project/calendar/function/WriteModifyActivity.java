@@ -110,6 +110,7 @@ public class WriteModifyActivity extends AppCompatActivity implements View.OnCli
         end_time_text = (TextView) findViewById(R.id.end_time_text);
         write_addlayout = (LinearLayout) findViewById(R.id.write_addlayout);
 
+
         month_text.setText(Month);
         date_text.setText(DAY);
         year_text.setText(Year + "\n" + getDayOfWeek(Integer.parseInt(DAY_OF_WEEK)));

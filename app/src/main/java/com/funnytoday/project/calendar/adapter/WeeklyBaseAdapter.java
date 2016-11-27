@@ -49,7 +49,7 @@ public class WeeklyBaseAdapter extends BaseAdapter {
         viewHolder.weekly_grid_text = (TextView) convertview.findViewById(R.id.weekly_grid_text);
         viewHolder.weekly_write_circle = (ImageView) convertview.findViewById(R.id.weekly_write_circle);
 
-        if (calendar.get(Calendar.DAY_OF_WEEK) - 1 > position) {  //첫날 전까지 빈칸 처리
+        if (calendar.get(Calendar.DAY_OF_WEEK) -1 > position) {  //첫날 전까지 빈칸 처리
             viewHolder.weekly_grid_text.setText(String.valueOf(""));
         } else {
             viewHolder.weekly_grid_text.setText(String.valueOf(position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1))); //position은 0부터시작하므로 +1 필요 그후 첫날전까지 빼줌
