@@ -2,18 +2,23 @@ package com.funnytoday.project.calendar.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.adapter.DayPagerAdapter;
+import com.funnytoday.project.calendar.util.Contact;
 
 public class DayFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
-    private String mParam2="test";
+    private String mParam2 = "test";
+    private ViewPager day_viewpager;
+    private DayPagerAdapter dayPagerAdapter;
 
     public DayFragment() {
     }
@@ -39,7 +44,13 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_day, container, false);
+        View view = inflater.inflate(R.layout.fragment_day, container, false);
+        day_viewpager = (ViewPager) view.findViewById(R.id.day_viewpager);
+        dayPagerAdapter = new DayPagerAdapter(getContext());
+        day_viewpager.setAdapter(dayPagerAdapter);
+        day_viewpager.setCurrentItem(Contact.VIEWPAGER_CURRENT);
+        day_viewpager.setOffscreenPageLimit(2);
+        return view;
     }
 
 
