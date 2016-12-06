@@ -1,6 +1,9 @@
 package com.funnytoday.project.calendar.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -50,6 +53,7 @@ public class DayFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
+        setIntentFilter();
         day_viewpager = (ViewPager) view.findViewById(R.id.day_viewpager);
         write_add_btn = (ImageView) view.findViewById(R.id.write_add_btn);
         Picasso.with(getContext()).load(R.drawable.write_add_image).fit().into(write_add_btn);
@@ -62,6 +66,11 @@ public class DayFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().unregisterReceiver(broadcastReceiver);
+    }
 
     @Override
     public void onClick(View view) {
@@ -73,4 +82,26 @@ public class DayFragment extends Fragment implements View.OnClickListener {
 
         }
     }
+
+    private void setIntentFilter() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Contact.viewpager_left);
+        intentFilter.addAction(Contact.viewpager_right);
+        intentFilter.addAction(Contact.SAVE_DB);
+        getContext().registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Contact.SAVE_DB)) {
+                dayPagerAdapter.notifyDataSetChanged();
+            } else if (intent.getAction().equals(Contact.viewpager_left)) {
+                day_viewpager.setCurrentItem(day_viewpager.getCurrentItem() - 1);
+            } else if (intent.getAction().equals(Contact.viewpager_right)) {
+                day_viewpager.setCurrentItem(day_viewpager.getCurrentItem() + 1);
+            }
+        }
+    };
 }

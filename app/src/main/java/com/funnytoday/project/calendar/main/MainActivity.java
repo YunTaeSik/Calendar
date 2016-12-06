@@ -24,6 +24,8 @@ import com.funnytoday.project.calendar.function.WriteActivity;
 import com.funnytoday.project.calendar.service.Alarmservice;
 import com.funnytoday.project.calendar.util.Contact;
 
+import static com.funnytoday.project.calendar.fragment.MouthFragment.getWriteVisible;
+
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (MouthFragment.getWriteVisible.equals("GONE")) {
+        if (getWriteVisible.equals("GONE")) {
             Intent intent = new Intent(this, FinishDialog.class);
             startActivity(intent);
         } else {
@@ -76,22 +78,24 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.main_fragment, new MouthFragment());
                 fragmentTransaction.commit();
                 actionBar.setTitle(getString(R.string.bar_title_M));
+                MouthFragment.getWriteVisible = "GONE";
                 break;
             case R.id.weekly_btn:
                 fragmentTransaction.replace(R.id.main_fragment, new WeekFragment());
                 fragmentTransaction.commit();
-
                 actionBar.setTitle(getString(R.string.bar_title_W));
+                MouthFragment.getWriteVisible = "GONE";
                 break;
             case R.id.day_btn:
                 fragmentTransaction.replace(R.id.main_fragment, new DayFragment());
                 fragmentTransaction.commit();
-
                 actionBar.setTitle(getString(R.string.bar_title_D));
+                MouthFragment.getWriteVisible = "GONE";
                 break;
             case R.id.write_btn:
                 Intent intent = new Intent(this, WriteActivity.class);
                 startActivity(intent);
+                MouthFragment.getWriteVisible = "GONE";
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,7 +1,9 @@
 package com.funnytoday.project.calendar.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.funnytoday.project.calendar.R;
+import com.funnytoday.project.calendar.db.DBManager;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -20,7 +24,10 @@ public class WeeklyBaseAdapter extends BaseAdapter {
     private Context context;
     private ViewHolder viewHolder;
     private Calendar calendar;
-    int jumpDay = 1;
+    private int jumpDay = 1;
+    private DBManager dbManager;
+    private SQLiteDatabase redadb;
+    private Cursor cursor;
 
     public WeeklyBaseAdapter(Context context, Calendar calender) {
         this.context = context;
@@ -43,30 +50,29 @@ public class WeeklyBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertview, ViewGroup parent) {
+    public View getView(final int position, View convertview, ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertview = layoutInflater.inflate(R.layout.weekly_gridview, parent, false);
         viewHolder = new ViewHolder();
         viewHolder.weekly_grid_text = (TextView) convertview.findViewById(R.id.weekly_grid_text);
-        viewHolder.weekly_write_circle = (ImageView) convertview.findViewById(R.id.weekly_write_circle);
+        viewHolder.write_count_text = (TextView) convertview.findViewById(R.id.write_count_text);
+        viewHolder.write_circle = (ImageView) convertview.findViewById(R.id.write_circle);
 
-   /*     if (calendar.get(Calendar.DAY_OF_WEEK) -1 > position) {  //첫날 전까지 빈칸 처리
-            viewHolder.weekly_grid_text.setText(String.valueOf(""));
-        } else {
-            viewHolder.weekly_grid_text.setText(String.valueOf(position + 1 - (calendar.get(Calendar.DAY_OF_WEEK) - 1))); //position은 0부터시작하므로 +1 필요 그후 첫날전까지 빼줌
-            viewHolder.weekly_grid_text.setBackground(context.getResources().getDrawable(R.drawable.day_background));
-        }
-*/
 
-        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
+        final int startDay = calendar.get(Calendar.DAY_OF_MONTH);
         int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         if (startDay + position <= endDay) {
             viewHolder.weekly_grid_text.setText(String.valueOf(startDay + position));
+            AsyncTaskObject asyncTaskObject = new AsyncTaskObject(calendar, viewHolder, Integer.parseInt(viewHolder.weekly_grid_text.getText().toString()), 0);
+            SearchDB searchDB = new SearchDB();
+            searchDB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskObject);
         } else {
             viewHolder.weekly_grid_text.setText(String.valueOf(jumpDay));
+            AsyncTaskObject asyncTaskObject = new AsyncTaskObject(calendar, viewHolder, Integer.parseInt(viewHolder.weekly_grid_text.getText().toString()), 1);
+            SearchDB searchDB = new SearchDB();
+            searchDB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskObject);
             jumpDay++;
         }
-        Log.e("test", String.valueOf(startDay) + String.valueOf(endDay));
         if (position % 7 == 0) {
             viewHolder.weekly_grid_text.setTextColor(context.getResources().getColor(R.color.colorAccent));
         } else if (position % 7 == 6) {
@@ -74,21 +80,70 @@ public class WeeklyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder.weekly_grid_text.setTextColor(context.getResources().getColor(R.color.balck));
         }
-        if (viewHolder.weekly_grid_text.getText().toString() != null) {
-            viewHolder.weekly_grid_text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-        }
-
 
         return convertview;
     }
 
     private class ViewHolder {
         private TextView weekly_grid_text;
-        private ImageView weekly_write_circle;
+        private ImageView write_circle;
+        private TextView write_count_text;
+    }
+
+    private class AsyncTaskObject { //어싱크테스크 객체 전달을위한 클래스
+        private Calendar Acalendar;
+        private ViewHolder AviewHolder;
+        private int ADAY;
+        private int AJump; //0 점프X , 1 점프0
+
+        private AsyncTaskObject(Calendar calendar, ViewHolder viewHolder, int day, int jump) {
+            this.Acalendar = calendar;
+            this.AviewHolder = viewHolder;
+            this.ADAY = day;
+            this.AJump = jump;
+        }
+    }
+
+    private class SearchDB extends AsyncTask {
+        private Calendar c;
+        private ViewHolder v;
+        private int i;
+        private int jump;
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            AsyncTaskObject asyncTaskObject = (AsyncTaskObject) objects[0];
+            c = asyncTaskObject.Acalendar;
+            v = asyncTaskObject.AviewHolder;
+            i = asyncTaskObject.ADAY;
+            jump = asyncTaskObject.AJump;
+
+            try {
+                dbManager = new DBManager(context, "Write", null, 1);
+                redadb = dbManager.getReadableDatabase();
+                String table_name = null;
+                if (jump == 0) { //기본
+                    table_name = String.valueOf(c.get(Calendar.YEAR)) + String.valueOf(c.get(Calendar.MONTH) + 1) + String.valueOf(i);
+                } else {//점프했을때
+                    c.add(Calendar.MONTH, 1);
+                    table_name = String.valueOf(c.get(Calendar.YEAR)) + String.valueOf(c.get(Calendar.MONTH) + 1) + String.valueOf(i);
+                }
+                cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
+                int count = cursor.getCount();
+                cursor.close();
+                redadb.close();
+                return count;
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+
+        protected void onPostExecute(Object o) {
+            int count = (int) o;
+            if (count > 0) {
+                Picasso.with(context).load(R.drawable.write_circle_background).fit().into(v.write_circle);
+                v.write_count_text.setText("X " + count);
+            }
+        }
     }
 }

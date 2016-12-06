@@ -80,6 +80,7 @@ public class DayPagerAdapter extends PagerAdapter implements View.OnClickListene
         viewHolder.left_image.setOnClickListener(this);
         viewHolder.right_image.setOnClickListener(this);
         viewHolder.calendar_text_layout.setOnClickListener(this);
+
         dbManager = new DBManager(context, "Write", null, 1);
         redadb = dbManager.getReadableDatabase();
         String table_name = viewHolder.calendar_text_year.getText().toString() + viewHolder.calendar_text_mouth.getText().toString()

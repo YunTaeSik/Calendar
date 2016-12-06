@@ -3,7 +3,6 @@ package com.funnytoday.project.calendar.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DataSetObservable;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -34,7 +33,6 @@ public class MouthlyBaseAdapter extends BaseAdapter {
     private SQLiteDatabase redadb;
     private String Day;
     private ArrayList arrayList;
-    DataSetObservable dataSetObservable = new DataSetObservable();
 
     public MouthlyBaseAdapter(Context context, Calendar calendar, ArrayList arrayList) {
         this.context = context;
