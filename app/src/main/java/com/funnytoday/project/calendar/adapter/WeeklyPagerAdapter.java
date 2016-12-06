@@ -52,15 +52,16 @@ public class WeeklyPagerAdapter extends PagerAdapter implements View.OnClickList
         viewHolder = new ViewHolder();
 
         viewHolder.weekly_grid = (GridView) viewpager.findViewById(R.id.weekly_grid);
-        viewHolder.calendar_text = (TextView) viewpager.findViewById(R.id.weekly_calendar_text);
+        viewHolder.calendar_text_year = (TextView) viewpager.findViewById(R.id.calendar_text_year);
+        viewHolder.calendar_text_mouth = (TextView) viewpager.findViewById(R.id.calendar_text_mouth);
+        viewHolder.calendar_text_week = (TextView) viewpager.findViewById(R.id.calendar_text_week);
         viewHolder.left_image = (ImageView) viewpager.findViewById(R.id.weekly_left_image);
         viewHolder.right_image = (ImageView) viewpager.findViewById(R.id.weekly_right_image);
 
         calendar = getCalendar(position);
-        String cal_text = String.valueOf(this.calendar.get(Calendar.YEAR)) + "년"
-                + String.valueOf(this.calendar.get(Calendar.MONTH) + 1) + "월"
-                + String.valueOf(this.calendar.get(Calendar.WEEK_OF_MONTH)) + "주차";
-        viewHolder.calendar_text.setText(cal_text);
+        viewHolder.calendar_text_year.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+        viewHolder.calendar_text_mouth.setText(String.valueOf(calendar.get(Calendar.MONTH) + 1));
+        viewHolder.calendar_text_week.setText(String.valueOf(calendar.get(Calendar.WEEK_OF_MONTH)) + " week");
 
         Picasso.with(context).load(R.drawable.left_arrow).fit().into(viewHolder.left_image);
         Picasso.with(context).load(R.drawable.right_arrow).fit().into(viewHolder.right_image);
@@ -82,18 +83,19 @@ public class WeeklyPagerAdapter extends PagerAdapter implements View.OnClickList
 
     }
 
-        private Calendar getCalendar(int position) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.WEEK_OF_MONTH, -Contact.VIEWPAGER_CURRENT);  //왜 +10을 해야하는지는 모르겠음..
-            calendar.set(Calendar.DATE, 1);  //1일 초기화 첫요일 구하기위해 필요함
-            calendar.add(Calendar.WEEK_OF_MONTH, position);
+    private Calendar getCalendar(int position) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.WEEK_OF_MONTH, -Contact.VIEWPAGER_CURRENT);  //왜 +10을 해야하는지는 모르겠음..
+        calendar.add(Calendar.WEEK_OF_MONTH, position);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        return calendar;
+    }
 
-            return calendar;
-        }
-
-        private class ViewHolder {
-            private GridView weekly_grid;
-            private TextView calendar_text;
+    private class ViewHolder {
+        private GridView weekly_grid;
         private ImageView left_image, right_image;
+        private TextView calendar_text_year;
+        private TextView calendar_text_mouth;
+        private TextView calendar_text_week;
     }
 }

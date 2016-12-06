@@ -113,9 +113,13 @@ public class MonthlyPagerAdapter extends PagerAdapter implements View.OnClickLis
 
     private Calendar getCalendar(int position) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, (-Contact.VIEWPAGER_CURRENT) + 10);  //왜 +10을 해야하는지는 모르겠음..
+        calendar.add(Calendar.MONTH, (-Contact.VIEWPAGER_CURRENT));  //왜 +10을 해야하는지는 모르겠음..
         calendar.set(Calendar.DATE, 1);  //1일 초기화 첫요일 구하기위해 필요함
         calendar.add(Calendar.MONTH, position);
+        /*   Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, (-Contact.VIEWPAGER_CURRENT) + 10);  //왜 +10을 해야하는지는 모르겠음..
+        calendar.set(Calendar.DATE, 1);  //1일 초기화 첫요일 구하기위해 필요함
+        calendar.add(Calendar.MONTH, position);*/
         return calendar;
     }
 

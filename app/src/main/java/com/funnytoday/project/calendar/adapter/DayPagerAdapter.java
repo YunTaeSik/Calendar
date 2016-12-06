@@ -38,11 +38,6 @@ public class DayPagerAdapter extends PagerAdapter implements View.OnClickListene
     private RecyclerView.LayoutManager R_layoutManager;
     private DBManager dbManager;
     private SQLiteDatabase redadb;
-    ArrayList starttime = new ArrayList();
-    ArrayList endtime = new ArrayList();
-    ArrayList title = new ArrayList();
-    ArrayList jsonarray = new ArrayList();
-
 
     public DayPagerAdapter(Context context) {
         this.context = context;
@@ -89,6 +84,12 @@ public class DayPagerAdapter extends PagerAdapter implements View.OnClickListene
         redadb = dbManager.getReadableDatabase();
         String table_name = viewHolder.calendar_text_year.getText().toString() + viewHolder.calendar_text_mouth.getText().toString()
                 + viewHolder.calendar_text_date.getText().toString();
+
+        ArrayList starttime = new ArrayList();
+        ArrayList endtime = new ArrayList();
+        ArrayList title = new ArrayList();
+        ArrayList jsonarray = new ArrayList();
+
         try {
             Cursor cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
             for (int i = 0; i < cursor.getCount(); i++) {
@@ -148,7 +149,7 @@ public class DayPagerAdapter extends PagerAdapter implements View.OnClickListene
 
     private Calendar getCalendar(int position) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DATE, (-Contact.VIEWPAGER_CURRENT) + 2);  //왜 +10을 해야하는지는 모르겠음..
+        calendar.add(Calendar.DATE, (-Contact.VIEWPAGER_CURRENT));  //왜 +10을 해야하는지는 모르겠음..
         calendar.add(Calendar.DATE, position);
         return calendar;
     }
