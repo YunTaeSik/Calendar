@@ -125,8 +125,10 @@ public class WeeklyBaseAdapter extends BaseAdapter {
                 if (jump == 0) { //기본
                     table_name = String.valueOf(c.get(Calendar.YEAR)) + String.valueOf(c.get(Calendar.MONTH) + 1) + String.valueOf(i);
                 } else {//점프했을때
-                    c.add(Calendar.MONTH, 1);
-                    table_name = String.valueOf(c.get(Calendar.YEAR)) + String.valueOf(c.get(Calendar.MONTH) + 1) + String.valueOf(i);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, c.get(Calendar.YEAR));
+                    calendar.set(Calendar.MONTH, c.get(Calendar.MONTH) + 1);
+                    table_name = String.valueOf(calendar.get(Calendar.YEAR)) + String.valueOf(calendar.get(Calendar.MONTH) + 1) + String.valueOf(i);
                 }
                 cursor = redadb.query("'" + table_name + "'", null, null, null, null, null, null);
                 int count = cursor.getCount();
