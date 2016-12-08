@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.function.WriteModifyActivity;
@@ -131,7 +130,6 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
                 intent.putExtra(Contact.DAY_OF_WEEK, DAY_OF_WEEK);
                 intent.putExtra(Contact.POSITION, position);
                 context.startActivity(intent);
-                Toast.makeText(context, String.valueOf(position), Toast.LENGTH_SHORT).show();
                 context.sendBroadcast(new Intent(Contact.WRITE_LIST_GONE));
             }
         });
