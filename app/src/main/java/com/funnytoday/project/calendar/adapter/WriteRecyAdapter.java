@@ -94,10 +94,13 @@ public class WriteRecyAdapter extends RecyclerView.Adapter<WriteRecyAdapter.View
         } catch (IOException e) {
         }
         String replacestarttime = get_starttime.replace("\n" + "hour", "");
-        tablename.set(Calendar.HOUR, Integer.parseInt(replacestarttime));
-        tablename.getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, tablename.get(Calendar.YEAR));
+        cal.set(Calendar.MONTH, tablename.get(Calendar.MONTH));
+        cal.set(Calendar.DATE, tablename.get(Calendar.DATE));
+        cal.set(Calendar.HOUR, Integer.parseInt(replacestarttime));
         Date startDate = Calendar.getInstance().getTime();
-        Date endDate = tablename.getTime();
+        Date endDate = cal.getTime();
         long duration = (endDate.getTime() - startDate.getTime()) / 1000;
         Log.e("test", String.valueOf(duration / 3600 / 24));
         int subdate = (int) (duration / 3600 / 24);

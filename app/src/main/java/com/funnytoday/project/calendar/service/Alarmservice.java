@@ -23,6 +23,7 @@ import java.util.Calendar;
  * Created by Note on 2016-11-27.
  */
 public class Alarmservice extends Service {
+    private String TAG = "Alarmservice";
     private WriteActivity wr;
     private DBManager dbManager;
     private SQLiteDatabase redadb;
@@ -37,7 +38,7 @@ public class Alarmservice extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("Alarmservice", "Alarmservice start");
+        Log.e(TAG, "Alarmservice start");
         getWriteDB();
         return super.onStartCommand(intent, flags, startId);
 
@@ -58,21 +59,26 @@ public class Alarmservice extends Service {
         if (cursor != null) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
-                Log.e("커서내용", cursor.getString(i));
                 if (!hourlist.contains(cursor.getString(i))) {
                     hourlist.add(cursor.getString(i));
                 }
             }
             cursor.close();
         }
+        AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent Intent = new Intent(getApplicationContext(), AlarmActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, Intent, 0);
+        am.cancel(pIntent);
         for (int i = 0; i < hourlist.size(); i++) {
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourlist.get(i)));
-
-            AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            Intent Intent = new Intent(getApplicationContext(), AlarmActivity.class);
-            PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, Intent, 0);
-            am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
+            cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(hourlist.get(i)) - cal.get(Calendar.HOUR_OF_DAY));
+            if (cal.getTimeInMillis() - calendar.getTimeInMillis() > 0) {
+                // am.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
+                // am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pIntent); //테스트용
+                int time = (Integer.parseInt(hourlist.get(i)) - calendar.get(Calendar.HOUR_OF_DAY)) * 3600 * 1000;
+                am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pIntent);
+            }
+            Log.e(TAG, String.valueOf(cal.getTimeInMillis() - calendar.getTimeInMillis()));
         }
     }
 }
