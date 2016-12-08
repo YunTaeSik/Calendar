@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -45,30 +46,33 @@ public class Alarmservice extends Service {
     private void getWriteDB() {
         Calendar calendar = Calendar.getInstance();
         String year = String.valueOf(calendar.get(Calendar.YEAR));
-        String month = String.valueOf(calendar.get(Calendar.MONTH));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         String date = String.valueOf(calendar.get(calendar.DATE));
-
         String tablename = year + month + date;
         dbManager = new DBManager(this, "Write", null, 1);
         redadb = dbManager.getReadableDatabase();
-        cursor = redadb.query("'" + tablename + "'", null, null, null, null, null, null);
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            Log.e("커서내용", cursor.getString(i));
-            if (!hourlist.contains(cursor.getString(i))) {
-                hourlist.add(cursor.getString(i));
-            }
+        try {
+            cursor = redadb.query("'" + tablename + "'", null, null, null, null, null, null);
+        } catch (SQLiteException e) {
         }
-        cursor.close();
-
+        if (cursor != null) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                Log.e("커서내용", cursor.getString(i));
+                if (!hourlist.contains(cursor.getString(i))) {
+                    hourlist.add(cursor.getString(i));
+                }
+            }
+            cursor.close();
+        }
         for (int i = 0; i < hourlist.size(); i++) {
             Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourlist.get(i)));
+
             AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             Intent Intent = new Intent(getApplicationContext(), AlarmActivity.class);
             PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, Intent, 0);
-            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourlist.get(i)));
             am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
         }
-        //am.set(AlarmManager.RTC, System.currentTimeMillis() + second, pIntent);
     }
 }

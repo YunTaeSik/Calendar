@@ -21,7 +21,6 @@ import com.funnytoday.project.calendar.fragment.DayFragment;
 import com.funnytoday.project.calendar.fragment.MouthFragment;
 import com.funnytoday.project.calendar.fragment.WeekFragment;
 import com.funnytoday.project.calendar.function.WriteActivity;
-import com.funnytoday.project.calendar.service.Alarmservice;
 import com.funnytoday.project.calendar.util.Contact;
 
 import static com.funnytoday.project.calendar.fragment.MouthFragment.getWriteVisible;
@@ -41,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.theme)));
         initFragment();
         setIntentFilter();
-
-        startService(new Intent(this, Alarmservice.class));
     }
 
     @Override
