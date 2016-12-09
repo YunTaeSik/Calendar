@@ -29,6 +29,7 @@ public class Alarmservice extends Service {
     private SQLiteDatabase redadb;
     private Cursor cursor;
     private ArrayList<String> hourlist = new ArrayList<>();
+    private AlarmManager am;
 
     @Nullable
     @Override
@@ -59,14 +60,14 @@ public class Alarmservice extends Service {
         if (cursor != null) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToNext();
-                Log.e(TAG, String.valueOf(cursor.getString(1)));
+                //Log.e(TAG, String.valueOf(cursor.getString(1)));
                 if (!hourlist.contains(cursor.getString(1))) {
                     hourlist.add(cursor.getString(1));
                 }
             }
             cursor.close();
         }
-        AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         Intent Intent = new Intent(getApplicationContext(), AlarmActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, Intent, 0);
         am.cancel(pIntent);
@@ -75,11 +76,10 @@ public class Alarmservice extends Service {
             cal.add(Calendar.HOUR_OF_DAY, Integer.parseInt(hourlist.get(i)) - calendar.get(Calendar.HOUR_OF_DAY));
             if (cal.getTimeInMillis() - calendar.getTimeInMillis() > 0) {
                 // am.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
-                // am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pIntent); //테스트용
+                //am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pIntent); //테스트용
                 int time = (Integer.parseInt(hourlist.get(i)) - calendar.get(Calendar.HOUR_OF_DAY)) * 3600 * 1000;
                 am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, pIntent);
             }
-            //Log.e(TAG, String.valueOf(cal.getTimeInMillis() - calendar.getTimeInMillis()));
             Log.e(TAG, String.valueOf(hourlist.get(i)));
         }
     }

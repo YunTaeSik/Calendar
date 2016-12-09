@@ -18,10 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service android:name=".service.Alarmservice" />
-
         <activity android:name=".main.MainActivity" />
+        <activity
+            android:name=".alarm.AlarmActivity"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
         <activity
             android:name=".dialog.FinishDialog"
             android:screenOrientation="portrait"
@@ -52,7 +52,6 @@
             android:windowSoftInputMode="adjustPan" />
 
         <service android:name=".service.Alarmservice" />
-
         <receiver android:name=".service.AlarmServiceReciver">
             <intent-filter>
                 <action
@@ -71,8 +70,6 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".alarm.AlarmActivity"></activity>
     </application>
 
 </manifest>
