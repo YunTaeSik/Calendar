@@ -1,19 +1,25 @@
 package com.funnytoday.project.calendar.main;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.funnytoday.project.calendar.R;
 import com.funnytoday.project.calendar.dialog.FinishDialog;
@@ -42,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
         initFragment();
         setIntentFilter();
         startService(new Intent(this, Alarmservice.class));
+
+        int permissionCheck_Read = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permissionCheck_Read == PackageManager.PERMISSION_DENIED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
+        } else {
+            Log.e("권한", "있음");
+        }
     }
 
     @Override
@@ -98,6 +114,23 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        recreate();
+                    } else {
+                        finish();
+                        Toast.makeText(getApplicationContext(), "권한을 허용을 하셔야 이용하실수 있습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return;
+        }
     }
 
     private void initFragment() {
