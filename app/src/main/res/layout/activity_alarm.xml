@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +7,43 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.funnytoday.project.calendar.alarm.AlarmActivity">
+    tools:context="com.funnytoday.project.calendar.alarm.AlarmActivity"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@drawable/alam"
+            >
 
-</RelativeLayout>
+        </TextView>
+        </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+
+        >
+        <Button
+            android:id="@+id/ok"
+            android:layout_marginTop="50dp"
+            android:layout_height="70dp"
+            android:layout_width="150dp">
+        </Button>
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_height="70dp"
+            android:layout_width="150dp">
+        </Button>
+    </LinearLayout>
+</LinearLayout>
