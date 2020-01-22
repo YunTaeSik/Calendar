@@ -27,3 +27,4 @@ RecyclerView, Sqlite 적용, UI 적용, 간단한 Animation 적용 등등
 <div>
     <img src="https://user-images.githubusercontent.com/23161645/72809493-12bc0500-3c9f-11ea-99bb-21eb92d390f3.png" hspace=8>
 </div>
+
